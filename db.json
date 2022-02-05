@@ -47,5 +47,22 @@
       "postId": 3,
       "createdAt": 1625745022499
     }
+  ],
+  "user":[
+    {
+      "name":"natnael",
+      "age":21,
+      "sex":"Male"
+    },
+    {
+      "name":"amir",
+      "age":21,
+      "sex":"Male"
+    },
+    {
+      "name":"babi",
+      "age":21,
+      "sex":"Male"
+    }
   ]
 }
