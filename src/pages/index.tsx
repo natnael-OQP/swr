@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div>
       <h4>useSWR Hook ⛳</h4>
-      <CreatePost />
+      <CreatePost setPosts={setPosts} />
       
       {/* is I dot have post */}
       { !posts && <Loader/> }
