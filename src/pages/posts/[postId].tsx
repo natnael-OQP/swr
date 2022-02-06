@@ -6,27 +6,34 @@ import { IComment, IPost } from "@libs/types";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Loader from "@components/Loader";
+import useSWR from "swr";
 
 const index = () => {
   
   const {query:{postId}}=useRouter()
-  const [post,setPost] = useState<IPost>(null)
-  const [comments,setComments] = useState<IComment[]>(null)
+// =================  traditional data fetching =====================
+  // const [post,setPost] = useState<IPost>(null)
+  // const [comments,setComments] = useState<IComment[]>(null)
 
-  const getPost = async() => {
-    const {data}=await axios(`/posts/${postId}/?_sort=createdAt&_order=desc`)
-    setPost(data)
-  };
+  // const getPost = async() => {
+  //   const {data}=await axios(`/posts/${postId}/?_sort=createdAt&_order=desc`)
+  //   setPost(data)
+  // };
 
-  const getComments = async() => {
-    const {data}=await axios(`/posts/${postId}/comments?_sort=createdAt&_order=desc`)
-    setComments(data);
-  };
+  // const getComments = async() => {
+  //   const {data}=await axios(`/posts/${postId}/comments?_sort=createdAt&_order=desc`)
+  //   setComments(data);
+  // };
 
-  useEffect(()=>{
-    postId && getPost();
-    postId && getComments();
-  },[postId])
+  // useEffect(()=>{
+  //   postId && getPost();
+  //   postId && getComments();
+  // },[postId])
+
+// =================  SWR data fetching =====================  
+  const {data:comments} = useSWR<IComment[]>(`/posts/${postId}/comments?_sort=createdAt&_order=desc`);
+  const {data:posts} = useSWR<IPost[]>(`/posts?_sort=createdAt&_order=desc`);
+  const post = posts?.find((post)=>post.id == Number(postId));
 
   return (
     <div>
