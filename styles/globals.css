@@ -11,6 +11,11 @@ h4 {
   margin: 1rem 0;
   text-align: center;
 }
+h5{
+  color:rgb(242, 189, 15);
+  margin:1rem;
+  size: 14px;
+}
 .card {
   box-shadow: 5px 5px 8px #1e1d1e, -5px -5px 8px #484748;
   cursor: pointer;
