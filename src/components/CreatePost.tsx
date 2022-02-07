@@ -1,7 +1,8 @@
+import { IPost } from "@libs/types";
 import axios from "axios";
 import { useState } from "react";
 
-const CreatePost = ({setPosts}) => {
+const CreatePost = ({mutate}) => {
   const [content, setContent] = useState("");
   const [isEmpty, setEmpty] = useState(false);
  
@@ -15,8 +16,18 @@ const CreatePost = ({setPosts}) => {
     };
     // generate random id
     const randomId = Math.floor((Math.random() *1000)+50);
+    // optimisticUi
+    const fakeData={
+      id:randomId,
+      content,
+      createdAt:Date.now(),
+      clientOnly:true,
+    }
     
-    const {data} = await axios({
+    mutate((post:IPost[]) => [fakeData,...post],false)
+    setContent("")
+
+     await axios({
       method:'post',
       url: "/posts",
       data:{
@@ -25,8 +36,8 @@ const CreatePost = ({setPosts}) => {
         createdAt:Date.now(),
       }
     })
-    setPosts((posts)=>[data,...posts])
-    setContent("")
+    // setPosts((posts)=>[data,...posts])
+    mutate();
   };
 
   return (

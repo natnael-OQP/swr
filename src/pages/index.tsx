@@ -19,12 +19,13 @@ export default function Home() {
   //   getPosts();
   // },[])
 // =================  SWR data fetching =====================
-  const {data:posts,error} = useSWR<IPost[]>("/posts?_sort=createdAt&_order=desc",);
+  const {data:posts,error,mutate} = useSWR<IPost[]>("/posts?_sort=createdAt&_order=desc",);
   // { refreshInterval: 10000 }
+  
   return (
     <div>
       <h4>useSWR Hook ⛳</h4>
-      <CreatePost  />
+      <CreatePost mutate={mutate}  />
       
       {/* if Error occur */}
       {error && <p>something is wrong</p> }
@@ -37,3 +38,7 @@ export default function Home() {
     </div>
   );
 }
+function data(data: any) {
+  throw new Error("Function not implemented.");
+}
+
