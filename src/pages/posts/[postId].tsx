@@ -31,17 +31,18 @@ const index = () => {
   // },[postId])
 
 // =================  SWR data fetching =====================  
-  const {data:comments} = useSWR<IComment[]>(`/posts/${postId}/comments?_sort=createdAt&_order=desc`);
+  const {data:comments,mutate} = useSWR<IComment[]>(`/posts/${postId}/comments?_sort=createdAt&_order=desc`);
   const {data:posts} = useSWR<IPost[]>(`/posts?_sort=createdAt&_order=desc`);
   const post = posts?.find((post)=>post.id == Number(postId));
-
+  console.log(comments);
+  
   return (
     <div>
       {!post&&<Loader/>}
       {
         post &&  <PostCard data={post} />
       }
-      <CreateComment />
+      <CreateComment postId={postId} mutate={mutate} />
 
       {!comments&&<Loader/>}
       <h4>Comments</h4>
