@@ -1,10 +1,12 @@
 import CreatePost from "@components/CreatePost";
 import Loader from "@components/Loader";
 import PostCard from "@components/PostCard";
+import { usePagination } from "@libs/hook";
 import { IPost } from "@libs/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+
 
 export default function Home() {
 // =================  traditional data fetching =====================
@@ -19,9 +21,11 @@ export default function Home() {
   //   getPosts();
   // },[])
 // =================  SWR data fetching =====================
-  const {data:posts,error,mutate} = useSWR<IPost[]>("/posts?_sort=createdAt&_order=desc",);
+  // const {data:posts,error,mutate} = useSWR<IPost[]>("/posts?_sort=createdAt&_order=desc",);
   // { refreshInterval: 10000 }
-  
+ 
+  const {data:posts,error,mutate,size,setSize}=usePagination("/posts?_sort=createdAt&_order=desc")
+
   return (
     <div>
       <h4>useSWR Hook ⛳</h4>
@@ -32,9 +36,10 @@ export default function Home() {
       {/* is I dot have post */}
       { !posts && <Loader/> }
       <h4>Posts</h4>
-      {posts?.map((post) => (
+      {posts?.flat().map((post) => (
         <PostCard key={post.id} data={post} />
       ))}
+      <button onClick={()=>setSize(size+1)} >load more</button>
     </div>
   );
 }

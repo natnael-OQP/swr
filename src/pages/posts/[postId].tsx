@@ -7,6 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Loader from "@components/Loader";
 import useSWR from "swr";
+import { usePagination } from "@libs/hook";
 
 const index = () => {
   
@@ -31,7 +32,10 @@ const index = () => {
   // },[postId])
 
 // =================  SWR data fetching =====================  
-  const {data:comments,mutate} = useSWR<IComment[]>(`/posts/${postId}/comments?_sort=createdAt&_order=desc`);
+  // const {data:comments,mutate} = useSWR<IComment[]>(`/posts/${postId}/comments?_sort=createdAt&_order=desc`);
+  
+  const {data:comments,error,mutate,size,setSize}=usePagination(`/posts/${postId}/comments?_sort=createdAt&_order=desc`)
+
   const {data:posts} = useSWR<IPost[]>(`/posts?_sort=createdAt&_order=desc`);
   const post = posts?.find((post)=>post.id == Number(postId));
   console.log(comments);
@@ -49,6 +53,8 @@ const index = () => {
       {comments?.map((comment) => (
         <CommentCard key={comment.id} data={comment} />
       ))}
+            <button onClick={()=>setSize(size+1)} >load more</button>
+
     </div>
   );
 };
